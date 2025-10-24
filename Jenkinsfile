@@ -13,5 +13,15 @@ pipeline {
                 bat "mvn clean test"
             }
         }
+        stage("Code Coverage") {
+            steps {
+                // Run tests and generate JaCoCo report
+                sh "mvn clean test jacoco:report"
+
+                // Verify code coverage thresholds (as defined in pom.xml)
+                sh "mvn jacoco:check"
+            }
+        }
+
     }
 }
