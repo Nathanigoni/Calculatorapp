@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    // Triggers should be defined here, outside stages
+    triggers {
+        pollSCM('* * * * *')  // checks every minute
+    }
+
     stages {
         stage("Compile") {
             steps {
@@ -13,37 +18,22 @@ pipeline {
                 bat "mvn clean test"
             }
         }
+
         stage("Code Coverage") {
             steps {
                 // Run tests and generate JaCoCo report
-                sh "mvn clean test jacoco:report"
+                bat "mvn clean test jacoco:report"
 
-                // Verify code coverage thresholds (as defined in pom.xml)
-                sh "mvn jacoco:check"
-            }
-        }
-        stage("Code Coverage") {
-            steps {
-                // Run tests and generate JaCoCo coverage report
-                sh "mvn clean test jacoco:report"
-
-                // Publish the JaCoCo HTML report in Jenkins
+                // Publish the JaCoCo HTML report
                 publishHTML(target: [
                     reportDir: 'target/site/jacoco',
                     reportFiles: 'index.html',
                     reportName: 'JaCoCo Report'
                 ])
 
-                // Enforce coverage rules from pom.xml
-                sh "mvn jacoco:check"
+                // Enforce coverage thresholds defined in pom.xml
+                bat "mvn jacoco:check"
             }
         }
-        stage("Triggers") {
-           triggers {
-            pollSCM('* * * * *')
-           }
-        }
-
-
     }
 }
