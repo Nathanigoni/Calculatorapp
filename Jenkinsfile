@@ -22,6 +22,28 @@ pipeline {
                 sh "mvn jacoco:check"
             }
         }
+        stage("Code Coverage") {
+            steps {
+                // Run tests and generate JaCoCo coverage report
+                sh "mvn clean test jacoco:report"
+
+                // Publish the JaCoCo HTML report in Jenkins
+                publishHTML(target: [
+                    reportDir: 'target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JaCoCo Report'
+                ])
+
+                // Enforce coverage rules from pom.xml
+                sh "mvn jacoco:check"
+            }
+        }
+        stage("Triggers") {
+           triggers {
+            pollSCM('* * * * *')
+           }
+        }
+
 
     }
 }
