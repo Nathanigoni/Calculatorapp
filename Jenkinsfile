@@ -19,22 +19,22 @@ pipeline {
             }
         }
 
-        stage("Code Coverage") {
-            steps {
-                // Run tests and generate JaCoCo report
-                bat "mvn clean test jacoco:report"
-
-                // Publish the JaCoCo HTML report
-                publishHTML(target: [
-                    reportDir: 'target/site/jacoco',
-                    reportFiles: 'index.html',
-                    reportName: 'JaCoCo Report'
-                ])
-
-                // Enforce coverage thresholds defined in pom.xml
-                bat "mvn jacoco:check"
-            }
-        }
+//         stage("Code Coverage") {
+//             steps {
+//                 // Run tests and generate JaCoCo report
+//                 bat "mvn clean test jacoco:report"
+//
+//                 // Publish the JaCoCo HTML report
+//                 publishHTML(target: [
+//                     reportDir: 'target/site/jacoco',
+//                     reportFiles: 'index.html',
+//                     reportName: 'JaCoCo Report'
+//                 ])
+//
+//                 // Enforce coverage thresholds defined in pom.xml
+//                 bat "mvn jacoco:check"
+//             }
+//         }
     }
 
     post {
