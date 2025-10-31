@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     // Triggers should be defined here, outside stages
-    triggers {
-        pollSCM('* * * * *')  // checks every minute
-    }
+//     triggers {
+//         pollSCM('* * * * *')  // checks every minute
+//     }
 
     stages {
         stage("Compile") {
